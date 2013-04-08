@@ -1,0 +1,24 @@
+<suite name="Test Runner" verbose="10" preserve-order="false">
+
+  <!-- Testing Settings -->
+  <test name="Run Specific Test Classes">
+    <groups>
+      <run>
+
+        <!-- we exclude tests as "bugs" only if there is a Bug Filed in JIRA, and if we get permission from Jeff Hawkins -->
+        <!--<exclude name="bugs"/>-->
+
+      </run>
+    </groups>
+    <packages>
+
+      <!--<package name="org.familysearch.selenium.test.*"/>-->
+
+    </packages>
+    <classes>
+
+      <class name="org.familysearch.selenium.test.ExampleTest"/>
+
+    </classes>
+  </test>
+</suite>

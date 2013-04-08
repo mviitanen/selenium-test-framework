@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.familysearch.qa:selenium-common:0.1.3.b1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/familysearch/qa/selenium-common/0.1.3.b1/selenium-common-0.1.3.b1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/familysearch/qa/selenium-common/0.1.3.b1/selenium-common-0.1.3.b1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/familysearch/qa/selenium-common/0.1.3.b1/selenium-common-0.1.3.b1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
