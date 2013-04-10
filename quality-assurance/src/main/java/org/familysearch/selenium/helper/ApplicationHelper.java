@@ -1,5 +1,6 @@
 package org.familysearch.selenium.helper;
 
+import org.apache.log4j.Logger;
 import org.familysearch.selenium.BaseSeleniumPage;
 import org.familysearch.selenium.pageobject.FamilySearch;
 import org.openqa.selenium.WebDriver;
@@ -11,7 +12,7 @@ import static org.testng.Assert.assertEquals;
 //import org.openqa.selenium.remote.Augmenter;
 
 public class ApplicationHelper extends BaseSeleniumPage {
-
+  protected static final Logger LOG = Logger.getLogger(ApplicationHelper.class);
   protected WebDriver driver;
 
   public ApplicationHelper(WebDriver driver) {
@@ -41,10 +42,16 @@ public class ApplicationHelper extends BaseSeleniumPage {
   }
 
   public void verifyResultName(String fullName) {
+    if (!isTextPresent(driver, fullName)) {
+      Assert.fail(getText("#main .content .search_error"));
+    }
     Assert.assertTrue(isTextPresent(driver, fullName));
   }
 
   public void verifyResultTitle(String individualRecordPageTitle) {
-    assertEquals(driver.getTitle(), individualRecordPageTitle);
+    if (!driver.getTitle().equalsIgnoreCase(individualRecordPageTitle)) {
+      Assert.fail(getText("#main .content .search_error"));
+    }
+    Assert.assertEquals(driver.getTitle(), individualRecordPageTitle);
   }
 }
