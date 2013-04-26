@@ -45,11 +45,13 @@ public class ExampleTest extends ApplicationHelper {
     FamilySearch familySearch = new FamilySearch(driver);
 
     gotoFamilySearch(familySearch);
+    familySearch.clickContinue();
     verifyMainTitle(mainTitle);
-    familySearch.waitForSearchButton();
+    familySearch.clickSearchButton();
+    familySearch.clickSearchHistoricalRecordsButton();
     familySearch.setGivenName(givenName);
     familySearch.setLastName(lastName);
-    SearchResults searchResults = familySearch.clickSearchButton();
+    SearchResults searchResults = familySearch.clickDoSearchButton();
     verifySearchResultsTitle(searchResultsTitle);
     verifyResults(givenName + " " + lastName);
     IndividualRecord individualRecord = searchResults.clickResultLink(givenName + " " + lastName);

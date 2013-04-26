@@ -12,7 +12,7 @@ public class SearchResults extends ApplicationHelper {
     /*
      * WebElements
      */
-  public static final String searchResultsContainer = ".results";
+  public static final String searchResultsContainer = ".app-search .hRResults #subject .search-results #hist-results .results";
   @FindBy(css= searchResultsContainer)
   private WebElement searchresultsContainer;
 

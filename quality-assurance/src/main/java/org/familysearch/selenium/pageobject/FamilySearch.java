@@ -8,20 +8,25 @@ import org.openqa.selenium.support.PageFactory;
 
 public class FamilySearch extends ApplicationHelper {
 
-    /*
-     * WebElements
-     */
-  private final String givenNameTextBox = "#hr_pg";
+  /*
+   * WebElements
+   */
+  private final String givenNameTextBox = ".app-search #main .row-fluid .span12 .search-form-control #record-search #person .exact-field .givenname #hr_pg";
   @FindBy(css = givenNameTextBox)
   private WebElement givennameTextbox;
 
-  private final String lastNameTextBox = "#hr_ps";
+  private final String lastNameTextBox = ".app-search #main .row-fluid .span12 .search-form-control #record-search #person .exact-field .surname #hr_ps";
   @FindBy(css = lastNameTextBox)
   private WebElement surnameTextbox;
 
-  private final String searchButton = ".btn.btn-water.searchForm";
+//  private final String searchButton = ".btn.btn-water.searchForm";
+  private final String searchButton = ".app-home #main .banner-nav .banner-nav-container .search a";
   @FindBy(css = searchButton)
   private WebElement searchbutton;
+
+  private final String searchHistoricalRecordsButton = ".app-home #main .banner .caroufredsel_wrapper .caroufredsel .search .banner-text a";
+
+  private final String doSearchButton = ".app-search #main .row-fluid .span12 .search-form-control #record-search .form-actions .btn";
 
   private WebDriver driver;
 
@@ -69,8 +74,20 @@ public class FamilySearch extends ApplicationHelper {
     setInputValue(lastNameTextBox, lastName);
   }
 
-  public SearchResults clickSearchButton() {
-    clickAndWaitForElementPresent(searchButton, SearchResults.searchResultsContainer);
-    return PageFactory.initElements(getDriver(),  SearchResults.class);
+  public void clickSearchButton() {
+    clickAndWaitForElementPresent(searchButton, searchHistoricalRecordsButton);
+  }
+
+  public void clickContinue() {
+    click(".fancybox-opened .fancybox-outer .fancybox-inner #engage-modal .more-link a");
+  }
+
+  public void clickSearchHistoricalRecordsButton() {
+    clickAndWaitForElementPresent(searchHistoricalRecordsButton, givenNameTextBox);
+  }
+
+  public SearchResults clickDoSearchButton() {
+    clickAndWaitForElementPresent(doSearchButton, SearchResults.searchResultsContainer);
+    return PageFactory.initElements(getDriver(), SearchResults.class);
   }
 }
