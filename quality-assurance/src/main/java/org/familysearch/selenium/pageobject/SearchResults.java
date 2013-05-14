@@ -38,6 +38,4 @@ public class SearchResults extends ApplicationHelper {
     waitForElementPresent(IndividualRecord.individualRecordContainer);
     return PageFactory.initElements(getDriver(), IndividualRecord.class);
   }
-
-
 }

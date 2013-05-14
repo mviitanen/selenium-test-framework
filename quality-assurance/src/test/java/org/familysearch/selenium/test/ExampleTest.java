@@ -41,11 +41,11 @@ public class ExampleTest extends ApplicationHelper {
     String deathDate = "12 Feb 1991";
     String mainTitle = "Free Family History and Genealogy Records — FamilySearch.org";
     String searchResultsTitle = "Search Results — FamilySearch.org";
-    String individualRecordPageTitle = "Record Details — FamilySearch.org";
+    String individualRecordPageTitle = "Thomas Leland Swan, \"California, Death Index, 1940-1997\"";
     FamilySearch familySearch = new FamilySearch(driver);
 
     gotoFamilySearch(familySearch);
-    familySearch.clickContinue();
+//    familySearch.clickContinue();
     verifyMainTitle(mainTitle);
     familySearch.clickSearchButton();
     familySearch.clickSearchHistoricalRecordsButton();

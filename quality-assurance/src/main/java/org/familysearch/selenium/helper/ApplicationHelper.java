@@ -49,9 +49,9 @@ public class ApplicationHelper extends BaseSeleniumPage {
   }
 
   public void verifyResultTitle(String individualRecordPageTitle) {
-    if (!driver.getTitle().equalsIgnoreCase(individualRecordPageTitle)) {
+    if (!driver.getTitle().contains(individualRecordPageTitle)) {
       Assert.fail(getText("#main .content .search_error"));
     }
-    Assert.assertEquals(driver.getTitle(), individualRecordPageTitle);
+    Assert.assertTrue(driver.getTitle().contains(individualRecordPageTitle));
   }
 }
