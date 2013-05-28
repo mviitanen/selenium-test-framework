@@ -2,92 +2,60 @@ package org.familysearch.selenium.pageobject;
 
 import org.familysearch.selenium.helper.ApplicationHelper;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static org.testng.Assert.assertEquals;
+
+/**
+ * FamilySearch Page Object
+ * The following methods are all "part of the page".
+ * We define the buttons, links, text locations and anything else we want to interact with on the page in this Page Object.
+ * For instance:
+ * The Strings defined here are all CSS Locators for the Objects on the Family Search Page.
+ * We also "extend" the Application Helper, which does anything that is COMMON to ALL tests.
+ *
+ * @author MamanakisDM
+ */
 public class FamilySearch extends ApplicationHelper {
 
-  /*
-   * WebElements
+  /**
+   * CSS Locators for several elements on the Family Search Search Page.
+   * etc
+   *
    */
-  private final String givenNameTextBox = ".app-search #main .row-fluid .span12 .search-form-control #record-search #person .exact-field .givenname #hr_pg";
-  @FindBy(css = givenNameTextBox)
-  private WebElement givennameTextbox;
-
-  private final String lastNameTextBox = ".app-search #main .row-fluid .span12 .search-form-control #record-search #person .exact-field .surname #hr_ps";
-  @FindBy(css = lastNameTextBox)
-  private WebElement surnameTextbox;
-
-//  private final String searchButton = ".btn.btn-water.searchForm";
-  private final String searchButton = ".app-home #main .banner-nav .banner-nav-container .search a";
-  @FindBy(css = searchButton)
-  private WebElement searchbutton;
-
-  private final String searchHistoricalRecordsButton = ".app-home #main .banner .caroufredsel_wrapper .caroufredsel .search .banner-text a";
-
+  private final String searchButton = ".app-home #main .banner-nav .banner-nav-container .banner-nav-list .search a";
   private final String doSearchButton = ".app-search #main .row-fluid .span12 .search-form-control #record-search .form-actions .btn";
-
   private WebDriver driver;
 
+  /**
+   * FamilySearch
+   * Constructor for the Page Object which makes the DRIVER available to you if you need it.
+   *
+   * @param driver
+   */
   public FamilySearch(WebDriver driver) {
     super(driver);
     this.driver = driver;
   }
 
-  /*
-   * Getter methods
+  /**
+   * clickSearchButton
+   * This clicks on the Search Button on the Main Page to get to the Search Page
+   *
+   * @return New Page Object "SearchPage"
    */
-  public WebElement getGivennameTextbox() {
-    return givennameTextbox;
+  public SearchPage clickSearchButton() {
+    clickAndWaitForElementPresent(searchButton, doSearchButton);
+    return PageFactory.initElements(getDriver(), SearchPage.class);
   }
 
-  public WebElement getSearchButton() {
-    return searchbutton;
-  }
-
-  public WebElement getSurnameTextbox() {
-    return surnameTextbox;
-  }
-
-  /*
-   * Helper methods
+  /**
+   * verifyFamilySearchMainPageTitle
+   * This will verify the Page Title on FamilySearch.org
+   *
+   * @param mainTitle
    */
-  public SearchResults searchByGivenAndSurname(String givenname, String surname) {
-    givennameTextbox.clear();
-    givennameTextbox.sendKeys(givenname);
-    surnameTextbox.clear();
-    surnameTextbox.sendKeys(surname);
-    searchbutton.click();
-    return new SearchResults(getDriver());
-  }
-
-  public WebElement waitForSearchButton() {
-    return waitForElementPresent(searchButton);
-  }
-
-  public void setGivenName(String givenName) {
-    setInputValue(givenNameTextBox, givenName);
-  }
-
-  public void setLastName(String lastName) {
-    setInputValue(lastNameTextBox, lastName);
-  }
-
-  public void clickSearchButton() {
-    clickAndWaitForElementPresent(searchButton, searchHistoricalRecordsButton);
-  }
-
-  public void clickContinue() {
-    click(".fancybox-opened .fancybox-outer .fancybox-inner #engage-modal .more-link a");
-  }
-
-  public void clickSearchHistoricalRecordsButton() {
-    clickAndWaitForElementPresent(searchHistoricalRecordsButton, givenNameTextBox);
-  }
-
-  public SearchResults clickDoSearchButton() {
-    clickAndWaitForElementPresent(doSearchButton, SearchResults.searchResultsContainer);
-    return PageFactory.initElements(getDriver(), SearchResults.class);
+  public void verifyFamilySearchMainPageTitle(String mainTitle) {
+    assertEquals(driver.getTitle(), mainTitle);
   }
 }
