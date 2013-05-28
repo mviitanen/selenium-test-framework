@@ -1,0 +1,50 @@
+<suite name="Test Runner" verbose="10" preserve-order="false">  <!-- You may also include other options on this line: parallel="classes" thread-count="15", etc. -->
+
+  <!-- Browser Settings = Please put your browser selections in this section. They can include Chrome, FireFox, IE, Safari, etc.
+  For CHROME (and maybe others) you will need to install the Selenium Chrome Driver into your home directory (for either Windows or Linux) -->
+  <!--<parameter name="selenium.browser" value="firefox"/>-->
+  <parameter name="selenium.browser" value="chrome"/>
+  <!--<parameter name="selenium.browser" value="ie"/>-->
+  <!--<parameter name="selenium.browser" value="safari"/>-->
+
+  <!--Selenium Server Settings = Please pur your environment settings here. The location of your test environment and any support you need for it. -->
+  <parameter name="selenium.links.host" value="http://app003.app.dev.links.fsglobal.net:8080/links"/>
+  <parameter name="selenium.server" value="http://10.35.86.99:4444/wd/hub" />
+  <!--<parameter name="selenium.server" value="SauceLabs" />-->
+  <parameter name="run.local" value="true"/>
+
+  <!-- Reference Settings = Please put your testing target here. Include any support you need for your target location. -->
+  <!-- Production Environment -->
+  <parameter name="selenium.api.host" value="https://api.familysearch.org" />
+  <parameter name="selenium.ct.host" value="http://familysearch.org/ct" />
+  <parameter name="working.url" value="https://familysearch.org/" />
+
+  <!-- Test Environment -->
+  <!--<parameter name="selenium.api.host" value="https://api.something.org" />-->
+  <!--<parameter name="selenium.ct.host" value="http://something.org/ct" />-->
+  <!--<parameter name="working.url" value="https://something.org/" />-->
+
+  <!-- Testing Settings = Please include or exclude your groups in this section. You may also run by Suite or by Test. It is all defined below. -->
+  <test name="Run Specific Test Classes By Group, Package, or Class">
+    <groups>
+      <run>
+
+        <!-- we exclude tests as "bugs" only if there is a Bug Filed in JIRA, and if we get permission from Jeff Hawkins -->
+        <!--<exclude name="bugs"/>-->
+        <!-- we include the tests we want to run -->
+        <include name="exampleTest"/>
+
+      </run>
+    </groups>
+    <packages>
+
+      <package name="org.familysearch.selenium.suite.*"/>
+
+    </packages>
+    <classes>
+
+      <!--<class name="org.familysearch.selenium.suite.ExampleSuite"/>-->
+
+    </classes>
+  </test>
+</suite>
