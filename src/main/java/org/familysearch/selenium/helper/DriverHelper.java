@@ -1,5 +1,7 @@
 package org.familysearch.selenium.helper;
 
+import com.saucelabs.common.SauceOnDemandSessionIdProvider;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -20,15 +22,23 @@ import java.net.URL;
  * @author PabstEC
  * @author MamanakisDM
  */
-public class DriverHelper extends ApplicationHelper{
+@Listeners({SauceOnDemandTestListener.class})
+public class DriverHelper extends ApplicationHelper implements SauceOnDemandSessionIdProvider{
 
   /**
    * Variables, Statics, Commons, etc
    * etc
    *
    */
+  //public SauceOnDemandAuthentication authentication;
   private BrowserHelper browserHelper;
   private static String workingUrl;
+  private static String sauceUserName;
+  private static String sauceUserKey;
+  private static String browser;
+  private static int browserVersion;
+  private static String server;
+  private static String os;
 
   /**
    *  DriverHelper
@@ -71,7 +81,7 @@ public class DriverHelper extends ApplicationHelper{
    * @param context
    * @param browser What browser the test is using. Pulled from the TestRunner.xml
    * @param seleniumServerUrl The URL of the Selenium Server. Pulled from the TestRunner.xml
-   * @param localRun If the test is to be run locally, or on the grid, or on SauceLabs.
+   * @param runLocation If the test is to be run locally, or on the grid, or on SauceLabs.
    * @param workingUrl This is the environment the tests will run against.
    * @param apiHost This is the public API host for the environment found in WorkingUrl.
    * @param ctHost This is the CT Public API host for the environment found in WorkingUrl.
@@ -79,13 +89,20 @@ public class DriverHelper extends ApplicationHelper{
    * @throws Exception
    */
   @BeforeClass(alwaysRun = true)
-  @Parameters({"selenium.browser", "selenium.server", "run.local", "working.url", "selenium.api.host", "selenium.ct.host",
-      "selenium.links.host"})
-  public final void setupClass(ITestContext context, @Optional String browser, @Optional String seleniumServerUrl,
-                               @Optional String localRun, @Optional String workingUrl, @Optional String apiHost, @Optional String ctHost,
-                               @Optional String linksHost) throws Exception {
-    this.browserHelper = BrowserHelper.getInstance(context, browser, seleniumServerUrl, Boolean.parseBoolean(localRun));
+  @Parameters({"selenium.browser", "selenium.browser.version", "selenium.os", "selenium.server", "run.location", "working.url",
+      "selenium.api.host", "selenium.ct.host", "selenium.links.host", "sauce.user.name", "sauce.user.key"})
+  public final void setupClass(ITestContext context, @Optional String browser, @Optional int browserVersion,
+                               @Optional String os, @Optional String seleniumServerUrl, @Optional String runLocation,
+                               @Optional String workingUrl, @Optional String apiHost, @Optional String ctHost,
+                               @Optional String linksHost, @Optional String sauceUser, @Optional String sauceKey) throws Exception {
+    this.browserHelper = BrowserHelper.getInstance(context, browser, seleniumServerUrl, runLocation);
     this.workingUrl = workingUrl;
+    this.sauceUserKey = sauceKey;
+    this.sauceUserName = sauceUser;
+    this.browser = browser;
+    this.browserVersion = browserVersion;
+    this.server = seleniumServerUrl;
+    this.os = os;
     beforeClass();
     // Make sure one is allocated for this test class.
     BrowserHelper browserSession = getBrowserSession();
@@ -100,6 +117,14 @@ public class DriverHelper extends ApplicationHelper{
    */
   public String getWorkingUrl() {
     return this.workingUrl;
+  }
+
+  public String getSauceUserName() {
+    return this.sauceUserName;
+  }
+
+  public String getSauceUserKey() {
+    return this.sauceUserKey;
   }
 
   /**
@@ -158,16 +183,16 @@ public class DriverHelper extends ApplicationHelper{
    * createWebDriver
    * Creator of the Web Driver  (Local, Remote, Sauce)
    *
-   * @param runLocal The environment that we want the Driver to be initialized for.
+   * @param runLocation The environment that we want the Driver to be initialized for.
    * @param browser The type of browser to be used in the tests.
    * @param serverUrl The location of the environment for the tests.
    * @return webDriver (WebDriver or RemoteWebDriver)
    * @throws MalformedURLException
    */
-  protected WebDriver createWebDriver(boolean runLocal, String browser, String serverUrl) throws MalformedURLException {
-    WebDriver webDriver;
+  protected WebDriver createWebDriver(String runLocation, String browser, String serverUrl) throws MalformedURLException {
+    WebDriver webDriver = null;
 
-    if (!runLocal) {
+    if (runLocation.equals(TestingPlatform.REMOTE_GRID.toString())) {
       if ("firefox".equalsIgnoreCase(browser)) {
         webDriver = new RemoteWebDriver(new URL(serverUrl), DesiredCapabilities.firefox());
       }
@@ -182,7 +207,7 @@ public class DriverHelper extends ApplicationHelper{
       } else {
         throw new IllegalArgumentException("Unknown Browser: " + browser);
       }
-    } else {
+    } else if (runLocation.equals(TestingPlatform.LOCAL_HOST.toString())) {
       if ("firefox".equalsIgnoreCase(browser)) {
 
         //The following code will need some modification, but it could/should provide a way to run FIREBUG in our TEST
@@ -219,7 +244,39 @@ public class DriverHelper extends ApplicationHelper{
       } else {
         throw new IllegalArgumentException("Unknown Browser: " + browser);
       }
+    } else if (runLocation.equals(TestingPlatform.SAUCE_LABS.toString())) {
+      if (!getSauceUserName().isEmpty() && !getSauceUserKey().isEmpty()) {
+        LOG.fatal("No user name or key for saucelabs");
+      }
+
+      DesiredCapabilities capabilities = new DesiredCapabilities();
+      capabilities.setBrowserName(browser);
+      capabilities.setCapability("version", this.browserVersion);
+      capabilities.setCapability("platform", Platform.valueOf(this.os));
+
+//      capabilities.setCapability("name", testName);
+      String urlURL = "http://" + getSauceUserName() + ":" + getSauceUserKey() + serverUrl;
+      webDriver = new RemoteWebDriver(new URL(urlURL), capabilities);
     }
     return webDriver;
+  }
+
+  //This factory uses the SauceBrowserDataProvider, which parses the SAUCE_ONDEMAND_BROWSERS environment variable
+  //@Factory(dataProviderClass=SauceBrowserDataProvider.class, dataProvider = "sauceBrowserDataProvider", parameters="browserJson")
+  public DriverHelper(String browser, int version, String os) {
+    super(null);
+    this.browser = browser;
+    this.browserVersion = version;
+    this.os = os;
+  }
+
+//  @Override
+//  public SauceOnDemandAuthentication getAuthentication() {
+//    return this.authentication;  //To change body of implemented methods use File | Settings | File Templates.
+//  }
+
+  @Override
+  public String getSessionId() {
+    return getSessionId();  //To change body of implemented methods use File | Settings | File Templates.
   }
 }

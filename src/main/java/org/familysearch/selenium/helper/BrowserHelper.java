@@ -38,7 +38,7 @@ public class BrowserHelper extends ApplicationHelper{
   public static final String BROWSER_HELPER = "browserSession";
   private final String browser;
   private final String seleniumServerUrl;
-  private final boolean runLocally;
+  private final String runLocation;
   private final WebDriver driver;
   private final ApplicationHelper applicationHelper;
   private final String testNodeIP;
@@ -50,13 +50,13 @@ public class BrowserHelper extends ApplicationHelper{
    * @param testContext The ITestContext which will store our reference to the WebDriver instance.
    * @param browser The browser to test with.
    * @param seleniumServerUrl The path to the remote selenium server if we are running our tests remotely.
-   * @param runLocally A flag indicating if we should run locally or remotely.
+   * @param runLocation A flag indicating if we should run locally or remotely.
    * @return browserHelper (BrowserHelper)
    */
-  public static BrowserHelper getInstance(ITestContext testContext, String browser, String seleniumServerUrl, boolean runLocally) {
+  public static BrowserHelper getInstance(ITestContext testContext, String browser, String seleniumServerUrl, String runLocation) {
     BrowserHelper browserHelper = findInstance(testContext);
     if (browserHelper == null) {
-      browserHelper = new BrowserHelper(browser, seleniumServerUrl, runLocally);
+      browserHelper = new BrowserHelper(browser, seleniumServerUrl, runLocation);
       testContext.setAttribute(BROWSER_HELPER, browserHelper);
     }
     return browserHelper;
@@ -79,13 +79,13 @@ public class BrowserHelper extends ApplicationHelper{
    *
    * @param browser
    * @param seleniumServerUrl
-   * @param runLocally
+   * @param runLocation
    */
-  private BrowserHelper(String browser, String seleniumServerUrl, boolean runLocally) {
+  private BrowserHelper(String browser, String seleniumServerUrl, String runLocation) {
     super(null);
     this.browser = browser;
     this.seleniumServerUrl = seleniumServerUrl;
-    this.runLocally = runLocally;
+    this.runLocation = runLocation;
     this.driver = getDriver();
     this.testNodeIP = getTestNodeIP();
     this.applicationHelper = new ApplicationHelper(driver, this);
@@ -99,13 +99,13 @@ public class BrowserHelper extends ApplicationHelper{
    * @param browser
    * @param seleniumServerUrl
    * @param testNodeIP
-   * @param runLocally
+   * @param runLocation
    */
-  private BrowserHelper(WebDriver driver, String browser, String seleniumServerUrl, String testNodeIP, boolean runLocally) {
+  private BrowserHelper(WebDriver driver, String browser, String seleniumServerUrl, String testNodeIP, String runLocation) {
     super(null, null);
     this.browser = browser;
     this.seleniumServerUrl = seleniumServerUrl;
-    this.runLocally = runLocally;
+    this.runLocation = runLocation;
     this.driver = driver;
     this.applicationHelper = new ApplicationHelper(driver, this);
     this.testNodeIP = testNodeIP;
@@ -123,12 +123,12 @@ public class BrowserHelper extends ApplicationHelper{
     WebDriver driver;
     String testNodeIP;
     try {
-      driver = driverHelper.createWebDriver(runLocally, browser, seleniumServerUrl);
-      testNodeIP = getTestNodeIP(runLocally, seleniumServerUrl, driver);
+      driver = driverHelper.createWebDriver(this.runLocation, this.browser, this.seleniumServerUrl);
+      testNodeIP = getTestNodeIP(this.runLocation, this.seleniumServerUrl, driver);
     } catch (MalformedURLException e) {
       throw new IllegalStateException(e);
     }
-    browserSession = new BrowserHelper(driver, browser, seleniumServerUrl, testNodeIP, runLocally);
+    browserSession = new BrowserHelper(driver, this.browser, this.seleniumServerUrl, testNodeIP, this.runLocation);
     Capabilities capabilities = ((RemoteWebDriver) driver).getCapabilities();
     return browserSession;
   }
@@ -156,7 +156,7 @@ public class BrowserHelper extends ApplicationHelper{
    * @return testNodeIP (String)
    */
   public String getTestNodeIP() {
-    return testNodeIP;
+    return this.testNodeIP;
   }
 
   /**
@@ -173,17 +173,17 @@ public class BrowserHelper extends ApplicationHelper{
    * getTestNodeIP
    * Getter/creator for the Test Node IP
    *
-   * @param runLocally
+   * @param runLocation
    * @param seleniumServerUrl
    * @param driver
    * @return testNodeIp (String)
    * @throws MalformedURLException
    */
-  public String getTestNodeIP(boolean runLocally, String seleniumServerUrl, WebDriver driver) throws MalformedURLException {
+  public String getTestNodeIP(String runLocation, String seleniumServerUrl, WebDriver driver) throws MalformedURLException {
     String testNodeIp;
-    if (runLocally || "${selenium.server}".equals(seleniumServerUrl)) {
+    if (runLocation.equals(TestingPlatform.LOCAL_HOST.name()) || "${selenium.server}".equals(seleniumServerUrl)) {
       testNodeIp = "localhost";
-    } else if (seleniumServerUrl != null && seleniumServerUrl.contains("saucelabs")) {
+    } else if (runLocation.equals(TestingPlatform.SAUCE_LABS.name()) || seleniumServerUrl.contains("saucelabs")) {
       testNodeIp = "Sauce Labs";
     } else {
       URL hubUrl = new URL(seleniumServerUrl);

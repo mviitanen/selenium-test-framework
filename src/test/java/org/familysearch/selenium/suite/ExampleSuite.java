@@ -42,4 +42,9 @@ public class ExampleSuite extends DriverHelper {
   public void runningAnExampleTestFromAnExampleTestSuite() throws Exception {
     exampleTest.searchUsingCommonLib();
   }
+
+  @Override
+  public String getSessionId() {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 }
