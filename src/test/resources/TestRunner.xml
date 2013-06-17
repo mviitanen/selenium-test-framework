@@ -2,11 +2,11 @@
 
   <!-- Browser Settings = Please put your browser selections in this section. They can include Chrome, FireFox, IE, Safari, etc.
   For CHROME (and maybe others) you will need to install the Selenium Chrome Driver into your home directory (for either Windows or Linux) -->
-  <!--<parameter name="selenium.browser" value="firefox"/>-->
-  <!--<parameter name="selenium.browser.version" value="18"/>-->
+  <parameter name="selenium.browser" value="firefox"/>
+  <parameter name="selenium.browser.version" value="18"/>
 
-  <parameter name="selenium.browser" value="chrome"/>
-  <parameter name="selenium.browser.version" value="24"/>
+  <!--<parameter name="selenium.browser" value="chrome"/>-->
+  <!--<parameter name="selenium.browser.version" value="20"/>-->
 
   <!--<parameter name="selenium.browser" value="ie"/>-->
   <!--<parameter name="selenium.browser.version" value="10"/>-->
@@ -15,15 +15,15 @@
   <!--<parameter name="selenium.browser.version" value="x"/>-->
 
   <!-- Testing Platform, Operating System -->
-  <parameter name="selenium.os" value="WINDOWS"/>
+  <parameter name="selenium.os" value="XP"/>
   <!--<parameter name="selenium.os" value="MAC"/>-->
   <!--<parameter name="selenium.os" value="LINUX"/>-->
   <!--<parameter name="selenium.os" value="ANDROID"/>-->
   <!--<parameter name="selenium.os" value="ANY"/>-->
 
   <!-- Sauce Labs Account Information = You can go to Sauce Labs and grab your username and an access key. -->
-  <parameter name="sauce.user.name" value="mamanakisdm"/>
-  <parameter name="sauce.user.key" value="f84de8ec-c34d-4055-9467-78afddb7dca3"/>
+  <parameter name="sauce.user.name" value=""/>
+  <parameter name="sauce.user.key" value=""/>
 
   <!--Selenium Server Settings = Please put your environment settings here. The location of your test environment and any support you need for it. -->
   <parameter name="selenium.links.host" value="http://app003.app.dev.links.fsglobal.net:8080/links"/>
@@ -32,8 +32,8 @@
 
   <!-- This parameter is where you want to run your tests: LOCALLy, On the REMOTE grid, or via SAUCE Labs. -->
   <!--<parameter name="run.location" value="REMOTE"/>-->
-  <!--<parameter name="run.location" value="LOCAL"/>-->
-  <parameter name="run.location" value="SAUCE"/>
+  <parameter name="run.location" value="LOCAL"/>
+  <!--<parameter name="run.location" value="SAUCE"/>-->
 
   <!-- Reference Settings = Please put your testing target here. Include any support you need for your target location. -->
   <!-- Production Environment -->

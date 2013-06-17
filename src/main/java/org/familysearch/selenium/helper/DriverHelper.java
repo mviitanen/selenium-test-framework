@@ -245,7 +245,7 @@ public class DriverHelper extends ApplicationHelper implements SauceOnDemandSess
         throw new IllegalArgumentException("Unknown Browser: " + browser);
       }
     } else if (runLocation.equals(TestingPlatform.SAUCE_LABS.toString())) {
-      if (!getSauceUserName().isEmpty() && !getSauceUserKey().isEmpty()) {
+      if (getSauceUserName().isEmpty() && getSauceUserKey().isEmpty()) {
         LOG.fatal("No user name or key for saucelabs");
       }
 
