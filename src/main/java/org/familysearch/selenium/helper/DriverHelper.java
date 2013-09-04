@@ -204,10 +204,12 @@ public class DriverHelper extends ApplicationHelper implements SauceOnDemandSess
       }
       else if (browser == null || browser.trim().length() == 0) {
         webDriver = new RemoteWebDriver(new URL(serverUrl), DesiredCapabilities.firefox());
-      } else {
+      }
+      else {
         throw new IllegalArgumentException("Unknown Browser: " + browser);
       }
-    } else if (runLocation.equals(TestingPlatform.LOCAL_HOST.toString())) {
+    }
+    else if (runLocation.equals(TestingPlatform.LOCAL_HOST.toString())) {
       if ("firefox".equalsIgnoreCase(browser)) {
 
         //The following code will need some modification, but it could/should provide a way to run FIREBUG in our TEST
@@ -227,24 +229,30 @@ public class DriverHelper extends ApplicationHelper implements SauceOnDemandSess
 //        webDriver = new FirefoxDriver(firefoxProfile);
 
         webDriver = new FirefoxDriver();
-      } else if ("ie".equalsIgnoreCase(browser)) {
+      }
+      else if ("ie".equalsIgnoreCase(browser)) {
         webDriver = new InternetExplorerDriver();
-      } else if ("chrome".equalsIgnoreCase(browser)) {
+      }
+      else if ("chrome".equalsIgnoreCase(browser)) {
         String executableName;
         if (System.getProperty("os.name").toLowerCase().contains("windows")) {
           executableName = "chromedriver.exe";
-        } else {
+        }
+        else {
           executableName = "chromedriver";
         }
         System.setProperty("webdriver.chrome.driver", new File(System.getProperty("user.home") + File.separator
             + executableName).getPath());
         webDriver = new ChromeDriver();
-      } else if (browser == null || browser.trim().length() == 0) {
+      }
+      else if (browser == null || browser.trim().length() == 0) {
         webDriver = new FirefoxDriver();
-      } else {
+      }
+      else {
         throw new IllegalArgumentException("Unknown Browser: " + browser);
       }
-    } else if (runLocation.equals(TestingPlatform.SAUCE_LABS.toString())) {
+    }
+    else if (runLocation.equals(TestingPlatform.SAUCE_LABS.toString())) {
       if (getSauceUserName().isEmpty() && getSauceUserKey().isEmpty()) {
         LOG.fatal("No user name or key for saucelabs");
       }
