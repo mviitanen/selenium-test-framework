@@ -53,8 +53,8 @@ public class ExampleTest extends ApplicationHelper {
     String lastName = "Swan";
     String deathDate = "12 Feb 1991";
     String mainTitle = "Free Family History and Genealogy Records — FamilySearch.org";
-    String searchResultsTitle = "Search Results — FamilySearch.org";
-    String individualRecordPageTitle = "Thomas Leland Swan, \"California, Death Index, 1940-1997\"";
+    String searchResultsTitle = "Search Results";
+    String individualRecordPageTitle = "Thomas Leland Swan";
     FamilySearch familySearch = new FamilySearch(driver);
     String url = driverHelper.getWorkingUrl();
 

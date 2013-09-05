@@ -14,7 +14,7 @@
   <properties>
     <sauce.version>1.0.18</sauce.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <selenium-common-lib.version>1.0.b9</selenium-common-lib.version>
+    <selenium-common-lib.version>1.0.b13</selenium-common-lib.version>
     <testng.version>6.8</testng.version>
     <selenium.version>2.33.0</selenium.version>
     <maven-failsafe-plugin.version>2.12</maven-failsafe-plugin.version>

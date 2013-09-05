@@ -21,7 +21,7 @@ public class IndividualRecord extends ApplicationHelper {
    * etc
    *
    */
-  public static final String individualRecordContainer = "#pagekey__search__hr_details";
+  public static final String individualRecordContainer = "#main .row-fluid .row-fluid .result-data";
   private WebDriver driver;
 
   /**

@@ -7,8 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-import static org.testng.Assert.assertEquals;
-
 /**
  * SearchResults Page Object
  * The following methods are all "part of the page".
@@ -48,6 +46,7 @@ public class SearchResults extends ApplicationHelper {
    * @return New Page Object "IndividualRecord"
    */
   public IndividualRecord clickResultLink(String fullName) {
+    waitForJQueryToBeInactive(driver);
     WebElement linkText = driver.findElement(By.linkText(fullName));
     String href = getHREFattribute(linkText);
     String locator = searchResultsContainer + " tbody" + " .result-name .person-name[href=\"" + href + "\"]";
@@ -63,7 +62,7 @@ public class SearchResults extends ApplicationHelper {
    * @param searchResultsTitle
    */
   public void verifySearchResultsPageTitle(String searchResultsTitle) {
-    assertEquals(driver.getTitle(), searchResultsTitle);
+    Assert.assertTrue(driver.getTitle().contains(searchResultsTitle));
   }
 
   /**
